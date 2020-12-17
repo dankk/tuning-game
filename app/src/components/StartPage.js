@@ -1,41 +1,41 @@
-import React, { useState } from "react";
-import { Button, Slider, makeStyles } from "@material-ui/core";
+import { Button, Grid, makeStyles, Slider } from "@material-ui/core";
+import { useRecoilState } from "recoil";
+import { difficultyState, startState } from "../atoms/atoms";
 
 const useStyles = makeStyles({
-  slider: {
-    width: 300
-  }
+  startPageRoot: { alignItems: "center" },
 });
 
-export const StartPage = ({ setStarted, setDifficulty }) => {
-  const [difficultySelection, setDifficultySelection] = useState(1);
-
+function StartPage() {
   const classes = useStyles();
-  const handleChange = (e, v) => {
-    setDifficultySelection(v);
-  };
-  const handleStart = () => {
-    setDifficulty(difficultySelection);
-    setStarted(true);
+  const [difficulty, setDifficulty] = useRecoilState(difficultyState);
+  const [, setStarted] = useRecoilState(startState);
+
+  const handleDifficultySelect = (event, value) => {
+    setDifficulty(value);
   };
 
   return (
-    <>
-      Difficulty: {difficultySelection}
-      <div className={classes.slider}>
+    <Grid container direction="column" className={classes.startPageRoot}>
+      <Grid item>
         <Slider
-          value={difficultySelection}
+          style={{ width: 200 }}
+          value={difficulty}
           valueLabelDisplay="auto"
           step={1}
           marks
           min={1}
           max={6}
-          onChange={handleChange}
+          onChange={handleDifficultySelect}
         />
-      </div>
-      <Button variant="outlined" onClick={() => handleStart()}>
-        Start
-      </Button>
-    </>
+      </Grid>
+      <Grid>
+        <Button onClick={() => setStarted(true)} variant="outlined">
+          Start
+        </Button>
+      </Grid>
+    </Grid>
   );
-};
+}
+
+export default StartPage;

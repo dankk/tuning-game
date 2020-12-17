@@ -1,57 +1,80 @@
-import React from "react";
+import { Button, Grid, makeStyles } from "@material-ui/core";
 import String from "./String";
-import StringHint from "./StringHint";
+import ResultBox from "./ResultBox";
+import { tunings, alteredNotesArray } from "../utils/notesContoller";
+import { useRecoilValue } from "recoil";
+import { difficultyState, selectedNoteIndexesState } from "../atoms/atoms";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 
-import { Grid, makeStyles } from "@material-ui/core";
+const useStyles = makeStyles({
+  stringGroupRoot: {
+    alignItems: "center",
+  },
+});
 
-const useStyles = makeStyles(theme => ({
-  stringRow: {
-    padding: theme.spacing(0.5, 0),
-    justifyContent: "center"
-  }
-}));
-
-const StringGroup = ({ ...props }) => {
+function StringGroup() {
   const classes = useStyles();
+  const selectedTuning = tunings.standard; //make this changable?
+  const difficulty = useRecoilValue(difficultyState);
+  const [selectedNoteIndexes, setSelectedNoteIndexes] = useRecoilState(
+    selectedNoteIndexesState
+  );
+  const [startingNoteIndexes, setStartingNoteIndexes] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitCorrect, setIsSubmitCorrect] = useState(false);
 
-  const startingNotes = props.startingNotes;
-  const correctNotes = props.correctNotes;
-  const handleNoteChange = props.handleNoteChange;
-  const notesList = props.notesList;
+  /*   //use difficulty to select random 'wrong' notes
+  const notesArray = useCallback(
+    alteredNotesArray(difficulty, selectedTuning),
+    []
+  ); */
+
+  useEffect(() => {
+    if (!isSubmitting) return;
+    const notesArray = alteredNotesArray(difficulty, selectedTuning);
+    console.log("new notes array");
+    console.log(notesArray);
+    setSelectedNoteIndexes(notesArray);
+    setStartingNoteIndexes(notesArray);
+    setIsSubmitting(false);
+  }, [isSubmitting]); //updates but displays only first notes??
+
+  const handleSubmit = () => {
+    setIsSubmitting(true);
+    setIsSubmitCorrect(
+      selectedNoteIndexes.every((v, i) => v === selectedTuning[i])
+    );
+    console.log(selectedNoteIndexes);
+    console.log(selectedTuning);
+    console.log(selectedNoteIndexes.every((v, i) => v === selectedTuning[i]));
+  };
 
   return (
-    <>
-      {startingNotes.map((v, i) => [
-        <Grid
-          container
-          direction="row"
-          wrap={"nowrap"}
-          className={classes.stringRow}
-          key={i}
+    <Grid container direction="column" className={classes.stringGroupRoot}>
+      Difficulty: {difficulty}
+      {selectedNoteIndexes.map((noteIndex, index) => (
+        <String
+          key={index}
+          stringIndex={index}
+          realNoteIndex={selectedTuning[index]}
+          selectedNoteIndex={noteIndex}
+          isWrong={startingNoteIndexes[index] !== selectedTuning[index]}
+        />
+      ))}
+      {isSubmitting ? (
+        <ResultBox isCorrect={isSubmitCorrect} />
+      ) : (
+        <Button
+          variant="outlined"
+          disabled={isSubmitting}
+          onClick={() => handleSubmit()}
         >
-          <String
-            key={i + 100}
-            stringIdx={i}
-            initNoteIdx={v}
-            correctNoteIdx={correctNotes[i]}
-            isBad={v !== correctNotes[i]}
-            handleNoteChange={handleNoteChange}
-            notesList={notesList}
-          />
-          {v !== correctNotes[i] ? (
-            <StringHint
-              key={i + 200}
-              noteIdx={correctNotes[i]}
-              maxHints={2}
-              notesList={notesList}
-            />
-          ) : (
-            <Grid item style={{ maxWidth: 100 }} />
-          )}
-        </Grid>
-      ])}
-    </>
+          Submit
+        </Button>
+      )}
+    </Grid>
   );
-};
+}
 
 export default StringGroup;

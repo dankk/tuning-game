@@ -1,115 +1,101 @@
-import React, { useReducer, useEffect } from "react";
-
-import { Paper, Grid, Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-
-import { indexToNoteFile } from "../utils/noteHandler";
-
-const pitchShiftReducer = (state, action) => {
-  switch (action.type) {
-    case "flat":
-      if (state.noteIdx <= 0) {
-        return state;
-      }
-      action.handleNoteChange(action.stringIdx, state.noteIdx - 1);
-      return {
-        noteIdx: state.noteIdx - 1,
-        text: action.notesList[state.noteIdx - 1],
-        soundPath: indexToNoteFile(state.noteIdx - 1, action.notesList)
-      };
-    case "sharp":
-      if (state.noteIdx >= action.notesList.length - 1) {
-        return state;
-      }
-      action.handleNoteChange(action.stringIdx, state.noteIdx + 1);
-      return {
-        noteIdx: state.noteIdx + 1,
-        text: action.notesList[state.noteIdx + 1],
-        soundPath: indexToNoteFile(state.noteIdx + 1, action.notesList)
-      };
-    default:
-      return state;
-  }
-};
+import { Button, Grid, makeStyles } from "@material-ui/core";
+import { useRecoilState } from "recoil";
+import { selectedNoteIndexesState } from "../atoms/atoms";
+import useAudio from "../hooks/useAudio";
+import StringHint from "./StringHint";
 
 const useStyles = makeStyles({
-  stringMain: { maxWidth: 350, alignItems: "center" },
-  stringNote: { width: 200 },
-  stringNoteBad: { width: 200, backgroundColor: "red" },
-  changeButton: { width: 75 }
+  stringRoot: { justifyContent: "center", margin: 3 },
+  stringMain: {},
+  stringSolveMain: { backgroundColor: "gray" },
+  stringChangeButton: {},
 });
 
-const String = ({ ...props }) => {
-  const isBad = props.isBad;
-  const initNoteIdx = props.initNoteIdx;
-  const notesList = props.notesList;
-  const handleNoteChange = props.handleNoteChange;
+function String({ stringIndex, selectedNoteIndex, realNoteIndex, isWrong }) {
+  const [audioObj, handleChangeAudio] = useAudio(selectedNoteIndex);
+  const [, setSelectedNoteIndexes] = useRecoilState(selectedNoteIndexesState);
+
+  const changeSelectedNoteIndexes = (stringIndex, newNoteIndex) => {
+    setSelectedNoteIndexes((s) =>
+      s.map((v, i) => (i === stringIndex ? newNoteIndex : v))
+    );
+  };
+
+  const lowerString = () => {
+    changeSelectedNoteIndexes(stringIndex, audioObj.noteIndex - 1);
+    handleChangeAudio(audioObj.noteIndex - 1);
+  };
+
+  const raiseString = () => {
+    changeSelectedNoteIndexes(stringIndex, audioObj.noteIndex + 1);
+    handleChangeAudio(audioObj.noteIndex + 1);
+  };
+
+  const playString = () => {
+    try {
+      audioObj.audio.pause();
+      audioObj.audio.currentTime = 0;
+      audioObj.audio.play();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const classes = useStyles();
 
-  const initState = {
-    noteIdx: initNoteIdx,
-    text: notesList[initNoteIdx],
-    soundPath: indexToNoteFile(initNoteIdx, notesList)
-  };
-
-  const [currentNote, dispatch] = useReducer(pitchShiftReducer, initState);
-
-  const soundFile = new Audio(currentNote.soundPath);
-
-  const handleNoteClick = () => {
-    soundFile.currentTime = 0;
-    soundFile.play();
-    console.log(`clicked ${currentNote.text}!`);
-  };
-
-  const dispatchNoteChange = (shift, stringIdx) => {
-    dispatch({
-      type: shift,
-      stringIdx: stringIdx,
-      notesList: notesList,
-      handleNoteChange: handleNoteChange
-    });
-  };
-
-  console.log("render");
+  if (!isWrong) {
+    return (
+      <Grid container direction="row" className={classes.stringRoot}>
+        <Grid item sm={2} />
+        <Grid item sm={6}>
+          <Button
+            className={classes.stringMain}
+            variant="outlined"
+            onClick={() => playString()}
+          >
+            {`► ${audioObj.name}`}
+          </Button>
+        </Grid>
+        <Grid item sm={2} />
+        <Grid item sm={2} />
+      </Grid>
+    );
+  }
 
   return (
-    <Grid container direction="row" className={classes.stringMain}>
-      <Grid item className={classes.changeButton}>
-        {isBad ? (
-          <Button
-            onClick={() => dispatchNoteChange("flat", props.stringIdx)}
-            size={"small"}
-          >
-            ♭
-          </Button>
-        ) : (
-          <></>
-        )}
-      </Grid>
-      <Grid item className={classes.stringNote}>
-        <Paper
-          onClick={handleNoteClick}
-          className={isBad ? classes.stringNoteBad : classes.stringNote}
+    <Grid container direction="row" className={classes.stringRoot}>
+      <Grid item sm={2}>
+        <Button
+          className={classes.stringChangeButton}
+          variant="outlined"
+          onClick={() => lowerString()}
         >
-          {isBad ? "?" : currentNote.text}
-        </Paper>
+          {"<- ♭"}
+        </Button>
       </Grid>
-      <Grid item className={classes.changeButton}>
-        {isBad ? (
-          <Button
-            onClick={() => dispatchNoteChange("sharp", props.stringIdx)}
-            size={"small"}
-          >
-            #
-          </Button>
-        ) : (
-          <></>
-        )}
+      <Grid item sm={6}>
+        <Button
+          className={classes.stringSolveMain}
+          variant="outlined"
+          onClick={() => playString()}
+        >
+          {`? ${audioObj.name}`}
+        </Button>
+      </Grid>
+      <Grid item sm={2}>
+        <Button
+          className={classes.stringChangeButton}
+          variant="outlined"
+          onClick={() => raiseString()}
+        >
+          {"♯ ->"}
+        </Button>
+      </Grid>
+      <Grid item sm={2}>
+        <StringHint noteIndex={realNoteIndex} />
       </Grid>
     </Grid>
   );
-};
+}
 
 export default String;
