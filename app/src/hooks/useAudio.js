@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { notesArray } from "../utils/notesContoller";
 
 export default function useAudio(noteIndex) {
@@ -9,6 +9,20 @@ export default function useAudio(noteIndex) {
     noteIndex,
     name: notesArray[noteIndex].name,
   });
+
+  //fixed
+  useEffect(
+    () =>
+      setAudio({
+        audio: new Audio(filePath),
+        noteIndex,
+        name: notesArray[noteIndex].name,
+      }),
+    [noteIndex]
+  );
+
+  console.log(noteIndex);
+  console.log(audioObj);
 
   const handleChangeAudio = useCallback((noteIndex) => {
     if (noteIndex < 0 || noteIndex >= notesArray.length) return;

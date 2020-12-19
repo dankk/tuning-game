@@ -3,7 +3,7 @@ import String from "./String";
 import ResultBox from "./ResultBox";
 import { tunings, alteredNotesArray } from "../utils/notesContoller";
 import { useRecoilValue } from "recoil";
-import { difficultyState, selectedNoteIndexesState } from "../atoms/atoms";
+import { difficultyState, noteIndexesState } from "../atoms/atoms";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
@@ -17,10 +17,11 @@ function StringGroup() {
   const classes = useStyles();
   const selectedTuning = tunings.standard; //make this changable?
   const difficulty = useRecoilValue(difficultyState);
-  const [selectedNoteIndexes, setSelectedNoteIndexes] = useRecoilState(
-    selectedNoteIndexesState
-  );
-  const [startingNoteIndexes, setStartingNoteIndexes] = useState(null);
+  const [
+    { selectedNoteIndexes, startingNoteIndexes },
+    setNoteIndexes,
+  ] = useRecoilState(noteIndexesState);
+  //const [startingNoteIndexes, setStartingNoteIndexes] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitCorrect, setIsSubmitCorrect] = useState(false);
 
@@ -30,25 +31,36 @@ function StringGroup() {
     []
   ); */
 
-  useEffect(() => {
-    if (!isSubmitting) return;
+  const getNewData = () => {
     const notesArray = alteredNotesArray(difficulty, selectedTuning);
-    console.log("new notes array");
-    console.log(notesArray);
-    setSelectedNoteIndexes(notesArray);
-    setStartingNoteIndexes(notesArray);
-    setIsSubmitting(false);
-  }, [isSubmitting]); //updates but displays only first notes??
+    setNoteIndexes({
+      selectedNoteIndexes: notesArray,
+      startingNoteIndexes: notesArray,
+    });
+    //setSelectedNoteIndexes(notesArray);
+    //setStartingNoteIndexes(notesArray);
+    //setIsSubmitting(false);
+  };
+
+  //init
+  useEffect(() => {
+    getNewData();
+  }, []);
 
   const handleSubmit = () => {
-    setIsSubmitting(true);
-    setIsSubmitCorrect(
-      selectedNoteIndexes.every((v, i) => v === selectedTuning[i])
-    );
-    console.log(selectedNoteIndexes);
-    console.log(selectedTuning);
-    console.log(selectedNoteIndexes.every((v, i) => v === selectedTuning[i]));
+    //   setIsSubmitCorrect(
+    //     selectedNoteIndexes.every((v, i) => v === selectedTuning[i])
+    //   );
+    //setIsSubmitting(true);
+    getNewData();
   };
+
+  console.log("real array");
+  console.log(selectedTuning);
+  console.log("new starting array");
+  console.log(startingNoteIndexes);
+  console.log("new selected array");
+  console.log(selectedNoteIndexes);
 
   return (
     <Grid container direction="column" className={classes.stringGroupRoot}>

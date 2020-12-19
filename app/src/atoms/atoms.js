@@ -10,7 +10,7 @@ export const difficultyState = atom({
   default: 1,
 });
 
-export const selectedNoteIndexesState = atom({
-  key: "selectedNoteIndexesState",
-  default: [],
+export const noteIndexesState = atom({
+  key: "noteIndexesState",
+  default: { selectedNoteIndexes: [], startingNoteIndexes: [] },
 });

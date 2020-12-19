@@ -1,6 +1,6 @@
 import { Button, Grid, makeStyles } from "@material-ui/core";
 import { useRecoilState } from "recoil";
-import { selectedNoteIndexesState } from "../atoms/atoms";
+import { noteIndexesState } from "../atoms/atoms";
 import useAudio from "../hooks/useAudio";
 import StringHint from "./StringHint";
 
@@ -13,12 +13,15 @@ const useStyles = makeStyles({
 
 function String({ stringIndex, selectedNoteIndex, realNoteIndex, isWrong }) {
   const [audioObj, handleChangeAudio] = useAudio(selectedNoteIndex);
-  const [, setSelectedNoteIndexes] = useRecoilState(selectedNoteIndexesState);
+  const [, setNoteIndexes] = useRecoilState(noteIndexesState);
 
   const changeSelectedNoteIndexes = (stringIndex, newNoteIndex) => {
-    setSelectedNoteIndexes((s) =>
-      s.map((v, i) => (i === stringIndex ? newNoteIndex : v))
-    );
+    setNoteIndexes((s) => ({
+      ...s,
+      selectedNoteIndexes: s.selectedNoteIndexes.map((v, i) =>
+        i === stringIndex ? newNoteIndex : v
+      ),
+    }));
   };
 
   const lowerString = () => {
