@@ -5,9 +5,9 @@ import useAudio from "../hooks/useAudio";
 import StringHint from "./StringHint";
 
 const useStyles = makeStyles({
-  stringRoot: { justifyContent: "center", margin: 3 },
-  stringMain: {},
-  stringSolveMain: { backgroundColor: "gray" },
+  stringRoot: { justifyContent: "center", margin: 3, width: "80vw" },
+  stringMain: { width: "40%" },
+  stringSolveMain: { backgroundColor: "gray", width: "40%" },
   stringChangeButton: {},
 });
 
@@ -46,52 +46,48 @@ function String({ stringIndex, selectedNoteIndex, realNoteIndex, isWrong }) {
   if (!isWrong) {
     return (
       <Grid container direction="row" className={classes.stringRoot}>
-        <Grid item sm={2} />
-        <Grid item sm={6}>
-          <Button
-            className={classes.stringMain}
-            variant="outlined"
-            onClick={() => playString()}
-          >
+        <Grid item xs={1} />
+        <Grid item xs={2} />
+        <Grid item xs={6} className={classes.stringMain}>
+          <Button variant="outlined" fullWidth onClick={() => playString()}>
             {`► ${audioObj.name}`}
           </Button>
         </Grid>
-        <Grid item sm={2} />
-        <Grid item sm={2} />
+        <Grid item xs={2} />
+        <Grid item xs={1} />
       </Grid>
     );
   }
 
   return (
     <Grid container direction="row" className={classes.stringRoot}>
-      <Grid item sm={2}>
+      <Grid item xs={1} />
+      <Grid item xs={2}>
         <Button
           className={classes.stringChangeButton}
           variant="outlined"
+          fullWidth
           onClick={() => lowerString()}
         >
           {"<- ♭"}
         </Button>
       </Grid>
-      <Grid item sm={6}>
-        <Button
-          className={classes.stringSolveMain}
-          variant="outlined"
-          onClick={() => playString()}
-        >
+      <Grid item xs={6} className={classes.stringSolveMain}>
+        <Button variant="outlined" fullWidth onClick={() => playString()}>
           {`? ${audioObj.name}`}
         </Button>
       </Grid>
-      <Grid item sm={2}>
+      <Grid item xs={2}>
         <Button
           className={classes.stringChangeButton}
           variant="outlined"
+          fullWidth
           onClick={() => raiseString()}
         >
           {"♯ ->"}
         </Button>
       </Grid>
-      <Grid item sm={2}>
+      <Grid item xs={1}>
         <StringHint noteIndex={realNoteIndex} />
       </Grid>
     </Grid>
