@@ -1,4 +1,5 @@
 import { Button, Grid, makeStyles } from "@material-ui/core";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { noteIndexesState } from "../atoms/atoms";
 import useAudio from "../hooks/useAudio";
@@ -14,6 +15,7 @@ const useStyles = makeStyles({
 function String({ stringIndex, selectedNoteIndex, realNoteIndex, isWrong }) {
   const [audioObj, handleChangeAudio] = useAudio(selectedNoteIndex);
   const [, setNoteIndexes] = useRecoilState(noteIndexesState);
+  const [noteChangeDisabled, setNoteChangeDisabled] = useState(false);
 
   const changeSelectedNoteIndexes = (stringIndex, newNoteIndex) => {
     setNoteIndexes((s) => ({
@@ -24,12 +26,19 @@ function String({ stringIndex, selectedNoteIndex, realNoteIndex, isWrong }) {
     }));
   };
 
+  const tempDisableNoteChange = (time) => {
+    setNoteChangeDisabled(true);
+    setTimeout(() => setNoteChangeDisabled(false), time);
+  };
+
   const lowerString = () => {
+    tempDisableNoteChange(500);
     changeSelectedNoteIndexes(stringIndex, audioObj.noteIndex - 1);
     handleChangeAudio(audioObj.noteIndex - 1);
   };
 
   const raiseString = () => {
+    tempDisableNoteChange(500);
     changeSelectedNoteIndexes(stringIndex, audioObj.noteIndex + 1);
     handleChangeAudio(audioObj.noteIndex + 1);
   };
@@ -70,6 +79,7 @@ function String({ stringIndex, selectedNoteIndex, realNoteIndex, isWrong }) {
           className={classes.stringChangeButton}
           variant="outlined"
           fullWidth
+          disabled={noteChangeDisabled}
           onClick={() => lowerString()}
         >
           {"<- ♭"}
@@ -85,6 +95,7 @@ function String({ stringIndex, selectedNoteIndex, realNoteIndex, isWrong }) {
           className={classes.stringChangeButton}
           variant="outlined"
           fullWidth
+          disabled={noteChangeDisabled}
           onClick={() => raiseString()}
         >
           {"♯ ->"}

@@ -21,9 +21,6 @@ export default function useAudio(noteIndex) {
     [noteIndex]
   );
 
-  console.log(noteIndex);
-  console.log(audioObj);
-
   const handleChangeAudio = useCallback((noteIndex) => {
     if (noteIndex < 0 || noteIndex >= notesArray.length) return;
 

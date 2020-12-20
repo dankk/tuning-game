@@ -39,7 +39,7 @@ function StringGroup() {
     });
     //setSelectedNoteIndexes(notesArray);
     //setStartingNoteIndexes(notesArray);
-    //setIsSubmitting(false);
+    setIsSubmitting(false);
   };
 
   //init
@@ -48,19 +48,16 @@ function StringGroup() {
   }, []);
 
   const handleSubmit = () => {
-    //   setIsSubmitCorrect(
-    //     selectedNoteIndexes.every((v, i) => v === selectedTuning[i])
-    //   );
-    //setIsSubmitting(true);
-    getNewData();
-  };
+    setIsSubmitting(true);
+    setIsSubmitCorrect(
+      selectedNoteIndexes.every((v, i) => v === selectedTuning[i])
+    );
 
-  console.log("real array");
-  console.log(selectedTuning);
-  console.log("new starting array");
-  console.log(startingNoteIndexes);
-  console.log("new selected array");
-  console.log(selectedNoteIndexes);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      getNewData();
+    }, 1000);
+  };
 
   return (
     <Grid container direction="column" className={classes.stringGroupRoot}>

@@ -39,7 +39,9 @@ export const alteredNotesArray = (n, notesArray) => {
     }
   }
   randInd.forEach((v) => {
-    newNotesArray[v] = notesArray[v] + 3; //randomize this
+    const randOffset =
+      Math.ceil(Math.random(1) * 3) * (Math.random(1) > 0.5 ? 1 : -1);
+    newNotesArray[v] = notesArray[v] + randOffset;
   });
   return newNotesArray;
 };
