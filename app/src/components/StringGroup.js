@@ -30,6 +30,7 @@ function StringGroup() {
   //const [startingNoteIndexes, setStartingNoteIndexes] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitCorrect, setIsSubmitCorrect] = useState(false);
+  const [score, setScore] = useState(0);
 
   /*   //use difficulty to select random 'wrong' notes
   const notesArray = useCallback(
@@ -55,9 +56,10 @@ function StringGroup() {
 
   const handleSubmit = () => {
     setIsSubmitting(true);
-    setIsSubmitCorrect(
-      selectedNoteIndexes.every((v, i) => v === selectedTuning[i])
-    );
+    if (selectedNoteIndexes.every((v, i) => v === selectedTuning[i])) {
+      setIsSubmitCorrect(true);
+      setScore((s) => s + 1);
+    }
 
     setTimeout(() => {
       setIsSubmitting(false);
@@ -72,7 +74,7 @@ function StringGroup() {
           <Typography>Difficulty: {difficulty}</Typography>
         </Grid>
         <Grid item className={classes.score}>
-          <Typography>Score: 123</Typography>
+          <Typography>Score: {score}</Typography>
         </Grid>
       </Grid>
 
