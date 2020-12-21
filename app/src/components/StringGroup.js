@@ -3,7 +3,7 @@ import String from "./String";
 import ResultBox from "./ResultBox";
 import { tunings, alteredNotesArray } from "../utils/notesContoller";
 import { useRecoilValue } from "recoil";
-import { difficultyState, noteIndexesState } from "../atoms/atoms";
+import { difficultyState, noteIndexesState, startState } from "../atoms/atoms";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
@@ -14,15 +14,17 @@ const useStyles = makeStyles((theme) => ({
   topInfo: {
     margin: theme.spacing(1),
     width: "90vw",
+    justifyContent: "space-around",
   },
-  difficulty: { position: "absolute" },
-  score: { flex: 1, textAlign: "center" },
+  difficulty: {},
+  score: {},
 }));
 
 function StringGroup() {
   const classes = useStyles();
   const selectedTuning = tunings.standard; //make this changable?
   const difficulty = useRecoilValue(difficultyState);
+  const [, setStarted] = useRecoilState(startState);
   const [
     { selectedNoteIndexes, startingNoteIndexes },
     setNoteIndexes,
@@ -67,14 +69,23 @@ function StringGroup() {
     }, 1000);
   };
 
+  const goHome = () => {
+    setStarted(false);
+  };
+
   return (
     <Grid container direction="column" className={classes.stringGroupRoot}>
-      <Grid container direction="row" classname={classes.topInfo}>
-        <Grid item className={classes.difficulty}>
-          <Typography>Difficulty: {difficulty}</Typography>
+      <Grid container direction="row" className={classes.topInfo}>
+        <Grid item>
+          <Button variant="outlined" onClick={() => goHome()}>
+            {"<--"}
+          </Button>
         </Grid>
         <Grid item className={classes.score}>
           <Typography>Score: {score}</Typography>
+        </Grid>
+        <Grid item className={classes.difficulty}>
+          <Typography>Difficulty: {difficulty}</Typography>
         </Grid>
       </Grid>
 
