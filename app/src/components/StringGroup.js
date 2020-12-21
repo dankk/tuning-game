@@ -1,4 +1,4 @@
-import { Button, Grid, makeStyles } from "@material-ui/core";
+import { Button, Grid, makeStyles, Typography } from "@material-ui/core";
 import String from "./String";
 import ResultBox from "./ResultBox";
 import { tunings, alteredNotesArray } from "../utils/notesContoller";
@@ -7,11 +7,17 @@ import { difficultyState, noteIndexesState } from "../atoms/atoms";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   stringGroupRoot: {
     alignItems: "center",
   },
-});
+  topInfo: {
+    margin: theme.spacing(1),
+    width: "90vw",
+  },
+  difficulty: { position: "absolute" },
+  score: { flex: 1, textAlign: "center" },
+}));
 
 function StringGroup() {
   const classes = useStyles();
@@ -61,7 +67,15 @@ function StringGroup() {
 
   return (
     <Grid container direction="column" className={classes.stringGroupRoot}>
-      Difficulty: {difficulty}
+      <Grid container direction="row" classname={classes.topInfo}>
+        <Grid item className={classes.difficulty}>
+          <Typography>Difficulty: {difficulty}</Typography>
+        </Grid>
+        <Grid item className={classes.score}>
+          <Typography>Score: 123</Typography>
+        </Grid>
+      </Grid>
+
       {selectedNoteIndexes.map((noteIndex, index) => (
         <String
           key={index}

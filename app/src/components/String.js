@@ -7,9 +7,9 @@ import StringHint from "./StringHint";
 
 const useStyles = makeStyles({
   stringRoot: { justifyContent: "center", margin: 3, width: "80vw" },
-  stringMain: { width: "40%" },
+  stringMain: { width: "40%", backgroundColor: "white" },
   stringSolveMain: { backgroundColor: "gray", width: "40%" },
-  stringChangeButton: {},
+  stringChangeButton: { backgroundColor: "white" },
 });
 
 function String({ stringIndex, selectedNoteIndex, realNoteIndex, isWrong }) {
@@ -87,7 +87,7 @@ function String({ stringIndex, selectedNoteIndex, realNoteIndex, isWrong }) {
       </Grid>
       <Grid item xs={6} className={classes.stringSolveMain}>
         <Button variant="outlined" fullWidth onClick={() => playString()}>
-          {`? ${audioObj.name}`}
+          {"?"}
         </Button>
       </Grid>
       <Grid item xs={2}>
