@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     width: "90vw",
     justifyContent: "space-around",
+    alignItems: "center",
   },
   difficulty: {},
   score: {},
@@ -66,7 +67,7 @@ function StringGroup() {
     setTimeout(() => {
       setIsSubmitting(false);
       getNewData();
-    }, 1000);
+    }, 1500);
   };
 
   const goHome = () => {
@@ -77,7 +78,7 @@ function StringGroup() {
     <Grid container direction="column" className={classes.stringGroupRoot}>
       <Grid container direction="row" className={classes.topInfo}>
         <Grid item>
-          <Button variant="outlined" onClick={() => goHome()}>
+          <Button variant="outlined" size="small" onClick={() => goHome()}>
             {"<--"}
           </Button>
         </Grid>
@@ -98,17 +99,14 @@ function StringGroup() {
           isWrong={startingNoteIndexes[index] !== selectedTuning[index]}
         />
       ))}
-      {isSubmitting ? (
-        <ResultBox isCorrect={isSubmitCorrect} />
-      ) : (
-        <Button
-          variant="outlined"
-          disabled={isSubmitting}
-          onClick={() => handleSubmit()}
-        >
-          Submit
-        </Button>
-      )}
+      <Button
+        variant="outlined"
+        disabled={isSubmitting}
+        onClick={() => handleSubmit()}
+      >
+        Submit
+      </Button>
+      <ResultBox open={isSubmitting} isCorrect={isSubmitCorrect} />
     </Grid>
   );
 }
