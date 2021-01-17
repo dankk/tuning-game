@@ -1,6 +1,7 @@
-import { Button, Grid, makeStyles, Slider } from "@material-ui/core";
+import { Button, Grid, makeStyles, Slider, Tooltip } from "@material-ui/core";
 import { useRecoilState } from "recoil";
 import { difficultyState, startState } from "../atoms/atoms";
+import InfoIcon from "@material-ui/icons/Info";
 
 const useStyles = makeStyles({
   startPageRoot: { alignItems: "center" },
@@ -17,6 +18,12 @@ function StartPage() {
 
   return (
     <Grid container direction="column" className={classes.startPageRoot}>
+      <Grid item>
+        Difficulty
+        <Tooltip title="# of strings to guess">
+          <InfoIcon fontSize="small" />
+        </Tooltip>
+      </Grid>
       <Grid item>
         <Slider
           style={{ width: 200 }}
