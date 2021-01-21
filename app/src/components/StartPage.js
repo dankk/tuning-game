@@ -7,10 +7,10 @@ const useStyles = makeStyles({
   startPageRoot: { alignItems: "center" },
 });
 
-function StartPage() {
+function StartPage({ setDifficulty, difficulty, setStarted }) {
   const classes = useStyles();
-  const [difficulty, setDifficulty] = useRecoilState(difficultyState);
-  const [, setStarted] = useRecoilState(startState);
+  //const [difficulty, setDifficulty] = useRecoilState(difficultyState);
+  //const [, setStarted] = useRecoilState(startState);
 
   const handleDifficultySelect = (event, value) => {
     setDifficulty(value);

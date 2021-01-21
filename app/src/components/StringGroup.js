@@ -2,10 +2,10 @@ import { Button, Grid, makeStyles, Typography } from "@material-ui/core";
 import String from "./String";
 import ResultBox from "./ResultBox";
 import { tunings, alteredNotesArray } from "../utils/notesContoller";
-import { useRecoilValue } from "recoil";
-import { difficultyState, noteIndexesState, startState } from "../atoms/atoms";
+//import { useRecoilValue } from "recoil";
+//import { useRecoilState } from "recoil";
+//import { difficultyState, noteIndexesState, startState } from "../atoms/atoms";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
 
 const useStyles = makeStyles((theme) => ({
   stringGroupRoot: {
@@ -21,15 +21,20 @@ const useStyles = makeStyles((theme) => ({
   score: {},
 }));
 
-function StringGroup() {
+function StringGroup({ difficulty, setStarted }) {
   const classes = useStyles();
   const selectedTuning = tunings.standard; //make this changable?
-  const difficulty = useRecoilValue(difficultyState);
-  const [, setStarted] = useRecoilState(startState);
-  const [
+  //const difficulty = useRecoilValue(difficultyState);
+  //const [, setStarted] = useRecoilState(startState);
+
+  const [startingNoteIndexes, setStartingNoteIndexes] = useState([]);
+  const [selectedNoteIndexes, setSelectedNoteIndexes] = useState([]);
+
+  /* const [
     { selectedNoteIndexes, startingNoteIndexes },
     setNoteIndexes,
-  ] = useRecoilState(noteIndexesState);
+  ] = useRecoilState(noteIndexesState); */
+
   //const [startingNoteIndexes, setStartingNoteIndexes] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitCorrect, setIsSubmitCorrect] = useState(false);
@@ -43,12 +48,15 @@ function StringGroup() {
 
   const getNewData = () => {
     const notesArray = alteredNotesArray(difficulty, selectedTuning);
-    setNoteIndexes({
+
+    /* setNoteIndexes({
       selectedNoteIndexes: notesArray,
       startingNoteIndexes: notesArray,
-    });
-    //setSelectedNoteIndexes(notesArray);
-    //setStartingNoteIndexes(notesArray);
+    }); */
+
+    setSelectedNoteIndexes(notesArray);
+    setStartingNoteIndexes(notesArray);
+
     setIsSubmitting(false);
   };
 
@@ -97,6 +105,7 @@ function StringGroup() {
           realNoteIndex={selectedTuning[index]}
           selectedNoteIndex={noteIndex}
           isWrong={startingNoteIndexes[index] !== selectedTuning[index]}
+          setSelectedNoteIndexes={(arr) => setSelectedNoteIndexes(arr)}
         />
       ))}
       <Button

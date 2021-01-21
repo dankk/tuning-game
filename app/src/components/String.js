@@ -1,7 +1,7 @@
 import { Button, Grid, makeStyles } from "@material-ui/core";
 import { useState } from "react";
-import { useRecoilState } from "recoil";
-import { noteIndexesState } from "../atoms/atoms";
+//import { useRecoilState } from "recoil";
+//import { noteIndexesState } from "../atoms/atoms";
 import useAudio from "../hooks/useAudio";
 import StringHint from "./StringHint";
 
@@ -12,18 +12,23 @@ const useStyles = makeStyles({
   stringChangeButton: { backgroundColor: "white" },
 });
 
-function String({ stringIndex, selectedNoteIndex, realNoteIndex, isWrong }) {
+function String({
+  stringIndex,
+  selectedNoteIndex,
+  realNoteIndex,
+  isWrong,
+  setSelectedNoteIndexes,
+}) {
   const [audioObj, handleChangeAudio] = useAudio(selectedNoteIndex);
-  const [, setNoteIndexes] = useRecoilState(noteIndexesState);
+
+  //const [, setNoteIndexes] = useRecoilState(noteIndexesState);
+
   const [noteChangeDisabled, setNoteChangeDisabled] = useState(false);
 
   const changeSelectedNoteIndexes = (stringIndex, newNoteIndex) => {
-    setNoteIndexes((s) => ({
-      ...s,
-      selectedNoteIndexes: s.selectedNoteIndexes.map((v, i) =>
-        i === stringIndex ? newNoteIndex : v
-      ),
-    }));
+    setSelectedNoteIndexes((s) =>
+      s.map((v, i) => (i === stringIndex ? newNoteIndex : v))
+    );
   };
 
   const tempDisableNoteChange = (time) => {
@@ -32,13 +37,13 @@ function String({ stringIndex, selectedNoteIndex, realNoteIndex, isWrong }) {
   };
 
   const lowerString = () => {
-    tempDisableNoteChange(500);
+    tempDisableNoteChange(100);
     changeSelectedNoteIndexes(stringIndex, audioObj.noteIndex - 1);
     handleChangeAudio(audioObj.noteIndex - 1);
   };
 
   const raiseString = () => {
-    tempDisableNoteChange(500);
+    tempDisableNoteChange(100);
     changeSelectedNoteIndexes(stringIndex, audioObj.noteIndex + 1);
     handleChangeAudio(audioObj.noteIndex + 1);
   };
@@ -87,7 +92,7 @@ function String({ stringIndex, selectedNoteIndex, realNoteIndex, isWrong }) {
       </Grid>
       <Grid item xs={6} className={classes.stringSolveMain}>
         <Button variant="outlined" fullWidth onClick={() => playString()}>
-          {"?"}
+          {"?" /* add string name */}
         </Button>
       </Grid>
       <Grid item xs={2}>
