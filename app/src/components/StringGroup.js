@@ -2,9 +2,6 @@ import { Button, Grid, makeStyles, Typography } from "@material-ui/core";
 import String from "./String";
 import ResultBox from "./ResultBox";
 import { tunings, alteredNotesArray } from "../utils/notesContoller";
-//import { useRecoilValue } from "recoil";
-//import { useRecoilState } from "recoil";
-//import { difficultyState, noteIndexesState, startState } from "../atoms/atoms";
 import { useEffect, useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -24,35 +21,16 @@ const useStyles = makeStyles((theme) => ({
 function StringGroup({ difficulty, setStarted }) {
   const classes = useStyles();
   const selectedTuning = tunings.standard; //make this changable?
-  //const difficulty = useRecoilValue(difficultyState);
-  //const [, setStarted] = useRecoilState(startState);
 
   const [startingNoteIndexes, setStartingNoteIndexes] = useState([]);
   const [selectedNoteIndexes, setSelectedNoteIndexes] = useState([]);
 
-  /* const [
-    { selectedNoteIndexes, startingNoteIndexes },
-    setNoteIndexes,
-  ] = useRecoilState(noteIndexesState); */
-
-  //const [startingNoteIndexes, setStartingNoteIndexes] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitCorrect, setIsSubmitCorrect] = useState(false);
   const [score, setScore] = useState(0);
 
-  /*   //use difficulty to select random 'wrong' notes
-  const notesArray = useCallback(
-    alteredNotesArray(difficulty, selectedTuning),
-    []
-  ); */
-
   const getNewData = () => {
     const notesArray = alteredNotesArray(difficulty, selectedTuning);
-
-    /* setNoteIndexes({
-      selectedNoteIndexes: notesArray,
-      startingNoteIndexes: notesArray,
-    }); */
 
     setSelectedNoteIndexes(notesArray);
     setStartingNoteIndexes(notesArray);

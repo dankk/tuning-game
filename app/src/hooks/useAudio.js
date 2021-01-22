@@ -4,13 +4,11 @@ import { notesArray } from "../utils/notesContoller";
 export default function useAudio(noteIndex) {
   const filePath = notesArray[noteIndex].path;
   const [audioObj, setAudio] = useState({
-    //recoil?
     audio: new Audio(filePath),
     noteIndex,
     name: notesArray[noteIndex].name,
   });
 
-  //fixed
   useEffect(
     () =>
       setAudio({

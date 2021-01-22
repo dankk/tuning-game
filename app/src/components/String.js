@@ -1,7 +1,5 @@
 import { Button, Grid, makeStyles } from "@material-ui/core";
 import { useState } from "react";
-//import { useRecoilState } from "recoil";
-//import { noteIndexesState } from "../atoms/atoms";
 import useAudio from "../hooks/useAudio";
 import StringHint from "./StringHint";
 
@@ -20,8 +18,6 @@ function String({
   setSelectedNoteIndexes,
 }) {
   const [audioObj, handleChangeAudio] = useAudio(selectedNoteIndex);
-
-  //const [, setNoteIndexes] = useRecoilState(noteIndexesState);
 
   const [noteChangeDisabled, setNoteChangeDisabled] = useState(false);
 

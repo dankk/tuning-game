@@ -1,6 +1,4 @@
 import { Button, Grid, makeStyles, Slider, Tooltip } from "@material-ui/core";
-import { useRecoilState } from "recoil";
-import { difficultyState, startState } from "../atoms/atoms";
 import InfoIcon from "@material-ui/icons/Info";
 
 const useStyles = makeStyles({
@@ -9,8 +7,6 @@ const useStyles = makeStyles({
 
 function StartPage({ setDifficulty, difficulty, setStarted }) {
   const classes = useStyles();
-  //const [difficulty, setDifficulty] = useRecoilState(difficultyState);
-  //const [, setStarted] = useRecoilState(startState);
 
   const handleDifficultySelect = (event, value) => {
     setDifficulty(value);
