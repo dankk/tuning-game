@@ -2,6 +2,7 @@ import { Button, Grid, makeStyles } from "@material-ui/core";
 import { useState } from "react";
 import useAudio from "../hooks/useAudio";
 import StringHint from "./StringHint";
+import { notesArray } from "../utils/notesContoller";
 
 const useStyles = makeStyles({
   stringRoot: { justifyContent: "center", margin: 3, width: "80vw" },
@@ -88,7 +89,7 @@ function String({
       </Grid>
       <Grid item xs={6} className={classes.stringSolveMain}>
         <Button variant="outlined" fullWidth onClick={() => playString()}>
-          {"?" /* add string name */}
+          {`? ${notesArray[realNoteIndex].name} ?`}
         </Button>
       </Grid>
       <Grid item xs={2}>
