@@ -34,12 +34,14 @@ function String({
   };
 
   const lowerString = () => {
+    if (audioObj.noteIndex === 0) return;
     tempDisableNoteChange(100);
     changeSelectedNoteIndexes(stringIndex, audioObj.noteIndex - 1);
     handleChangeAudio(audioObj.noteIndex - 1);
   };
 
   const raiseString = () => {
+    if (audioObj.noteIndex === notesArray.length - 1) return;
     tempDisableNoteChange(100);
     changeSelectedNoteIndexes(stringIndex, audioObj.noteIndex + 1);
     handleChangeAudio(audioObj.noteIndex + 1);
