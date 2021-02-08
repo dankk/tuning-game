@@ -28,12 +28,14 @@ function StringGroup({ difficulty, setStarted }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitCorrect, setIsSubmitCorrect] = useState(false);
   const [score, setScore] = useState(0);
+  const [roundNum, setRoundNum] = useState(0);
 
   const getNewData = () => {
     const notesArray = alteredNotesArray(difficulty, selectedTuning);
 
     setSelectedNoteIndexes(notesArray);
     setStartingNoteIndexes(notesArray);
+    setRoundNum((rn) => rn + 1);
 
     setIsSubmitting(false);
   };
@@ -48,11 +50,13 @@ function StringGroup({ difficulty, setStarted }) {
     if (selectedNoteIndexes.every((v, i) => v === selectedTuning[i])) {
       setIsSubmitCorrect(true);
       setScore((s) => s + 1);
+    } else {
+      setIsSubmitCorrect(false);
     }
 
     setTimeout(() => {
-      setIsSubmitting(false);
       getNewData();
+      setIsSubmitting(false);
     }, 1500);
   };
 
@@ -83,7 +87,8 @@ function StringGroup({ difficulty, setStarted }) {
           realNoteIndex={selectedTuning[index]}
           selectedNoteIndex={noteIndex}
           isWrong={startingNoteIndexes[index] !== selectedTuning[index]}
-          setSelectedNoteIndexes={(arr) => setSelectedNoteIndexes(arr)}
+          setSelectedNoteIndexes={setSelectedNoteIndexes}
+          roundNum={roundNum}
         />
       ))}
       <Button

@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAudio from "../hooks/useAudio";
 
 const { Button } = require("@material-ui/core");
 
-function StringHint({ noteIndex }) {
+function StringHint({ noteIndex, roundNum }) {
   const [clicked, setClicked] = useState(false);
   const [audioObj] = useAudio(noteIndex);
+
+  useEffect(() => {
+    setClicked(false);
+  }, [roundNum]);
 
   const playNote = () => {
     try {

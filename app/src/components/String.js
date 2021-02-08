@@ -17,9 +17,9 @@ function String({
   realNoteIndex,
   isWrong,
   setSelectedNoteIndexes,
+  roundNum,
 }) {
   const [audioObj, handleChangeAudio] = useAudio(selectedNoteIndex);
-
   const [noteChangeDisabled, setNoteChangeDisabled] = useState(false);
 
   const changeSelectedNoteIndexes = (stringIndex, newNoteIndex) => {
@@ -106,7 +106,7 @@ function String({
         </Button>
       </Grid>
       <Grid item xs={1}>
-        <StringHint noteIndex={realNoteIndex} />
+        <StringHint noteIndex={realNoteIndex} roundNum={roundNum} />
       </Grid>
     </Grid>
   );

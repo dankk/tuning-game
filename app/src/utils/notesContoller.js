@@ -30,18 +30,19 @@ export const notesArray = octs_list.reduce((notes, oct) => {
 
 export const alteredNotesArray = (n, notesArray) => {
   //n: num of notes to change; 1-6
-  let randInd = []; //0-5
-  let newNotesArray = Array.from(notesArray);
+  let randInd = []; //list of strings to alter
+  let alteredNotesArray = Array.from(notesArray);
   while (randInd.length < n) {
     const r = Math.floor(Math.random() * 6);
     if (!randInd.includes(r)) {
       randInd.push(r);
     }
   }
+
   randInd.forEach((v) => {
     const randOffset =
       Math.ceil(Math.random(1) * 3) * (Math.random(1) > 0.5 ? 1 : -1);
-    newNotesArray[v] = notesArray[v] + randOffset;
+    alteredNotesArray[v] = notesArray[v] + randOffset;
   });
-  return newNotesArray;
+  return alteredNotesArray;
 };
