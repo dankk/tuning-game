@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useAudio from "../hooks/useAudio";
 
-const { Button } = require("@material-ui/core");
+const { Button, Tooltip } = require("@material-ui/core");
 
 function StringHint({ noteIndex, roundNum }) {
   const [clicked, setClicked] = useState(false);
@@ -23,9 +23,11 @@ function StringHint({ noteIndex, roundNum }) {
   };
 
   return (
-    <Button variant="outlined" disabled={clicked} onClick={() => playNote()}>
-      Hint
-    </Button>
+    <Tooltip title="Listen to Correct Note">
+      <Button variant="outlined" disabled={clicked} onClick={() => playNote()}>
+        Hint
+      </Button>
+    </Tooltip>
   );
 }
 
